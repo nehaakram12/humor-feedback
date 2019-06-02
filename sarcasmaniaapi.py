@@ -51,8 +51,11 @@ def api_text():
     print("Humor label: ", humorlabel)
 
     d = []
+    #opening file
     dataFile = open('output1.txt', 'rb')
+    #loading file
     d = pickle.load(dataFile)
+    #loading the previously saved model
     filename = 'partial_fit_model.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
 
@@ -61,7 +64,11 @@ def api_text():
 
     # inputsen = "haha you are so funny go kill yourself asshole"
     # humorlabel = 0
+    
+    #creating features of data
     X = create_tfidf_training_data(d, inputsen)
+    
+    #retraining the model on the new data
     loaded_model.partial_fit(X, [humorlabel])
 
     # saving the updated model back to model file
