@@ -7,23 +7,14 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
+#initializing flask api
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
 def init():
-    # global d,loaded_model_humor,service
-    # load the pre-trained Keras model
     print("Please wait while the Data-Models load!...")
-    # d = []
-    # dataFile = open('output1.txt', 'rb')
-    # d = pickle.load(dataFile)
-    # filename_humor = 'partial_fit_model.sav'
-    # loaded_model_humor = pickle.load(open(filename_humor, 'rb'))
-
 
 
 @app.route('/', methods=['GET'])
@@ -38,12 +29,14 @@ def page_not_found(e):
 @app.route('/api/sarcasmania', methods=['GET'])
 def api_text():
     inputsen=""
+    #taking sentence from url params
     if 'text' in request.args:
         inputsen = (request.args['text'])
     else:
         return "Error: No text field provided. Please specify text."
     print("Input Line: ", inputsen)
     humorlabel=0
+    #taking score label from url params
     if 'label' in request.args:
         humorlabel = (request.args['label'])
     else:
@@ -59,12 +52,6 @@ def api_text():
     filename = 'partial_fit_model.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
 
-    # X = create_tfidf_training_data(d,column)
-    # loaded_model.partial_fit(X,[label])
-
-    # inputsen = "haha you are so funny go kill yourself asshole"
-    # humorlabel = 0
-    
     #creating features of data
     X = create_tfidf_training_data(d, inputsen)
     
